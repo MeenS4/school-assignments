@@ -3,38 +3,43 @@ import './App.scss';
 import styles from './App.module.scss';
 
 import BaseButton from './components/BaseButton/BaseButton';
-import Counter from './components/Counter/Counter';
 
 export default function App() {
-  const [counter, setCounter] = useState(0);
+  const [color, setColor] = useState('#FFFFFF');
+  const [value, setValue] = useState('#FFFFFF');
 
-  function handleUpdateCounter(symbol) {
-    if (symbol === '+') {
-      let newCounter = counter + 1;
-      setCounter(newCounter);
-    } else {
-      let newCounter = counter - 1;
-      setCounter(newCounter);
-    }
+  let style = {
+    backgroundColor: color,
+  };
+
+  function handleColorInputChange(newValue) {
+    setValue(newValue);
   }
 
-  function handleBackgroundColorChange() {
-    if (counter > 0) return 'red-bg';
+  function generateRandomHex() {
+    let randomHex = '';
 
-    if (counter < 0) return 'blue-bg';
+    for (let i = 0; i < 6; i++) {
+      const randomDigit = Math.floor(Math.random() * 16);
+      randomHex += randomDigit.toString(16);
+    }
 
-    if (counter === 0) return 'neutral-bg';
+    return randomHex;
+  }
+
+  function handleSetBackgroundColor() {
+    setColor(value);
   }
 
   return (
-    <div
-      className={`${styles['container']} ${
-        styles[handleBackgroundColorChange()]
-      }`}
-    >
-      <BaseButton text='-' onUpdateCounter={handleUpdateCounter} />
-      <Counter counter={counter} />
-      <BaseButton text='+' onUpdateCounter={handleUpdateCounter} />
+    <div className={styles['container']} style={style}>
+      <div className={styles['hex']}>#</div>
+      <input
+        className={styles['color-input']}
+        type='text'
+        onChange={(event) => handleColorInputChange(event.target.value)}
+      />
+      <BaseButton text='Set background' onClick={handleSetBackgroundColor} />
     </div>
   );
 }
